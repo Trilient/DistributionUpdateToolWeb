@@ -1,0 +1,27 @@
+﻿@model IEnumerable<DistributionUpdateToolWeb.Models.Client>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Client List</h2>
+
+<table class="table table-responsive table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Client Name</th>
+            <th scope="col">Id</th>
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var client in Model)
+            {
+            <tr>
+                <td>@Html.ActionLink(client.Name, "Details", new { id = client.Id })</td>
+                <td>@client.Id</td>
+            </tr>
+            }
+</tbody>
+    
+</table>
+

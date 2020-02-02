@@ -1,0 +1,25 @@
+﻿@model DistributionUpdateToolWeb.Models.Client
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Name</h2>
+
+<table class="table table-responsive table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Client Distribution</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var email in Model.EmailDistribution)
+        {
+            <tr>
+                <td>@email</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
