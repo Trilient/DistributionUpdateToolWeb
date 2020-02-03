@@ -1,10 +1,10 @@
-﻿@model DistributionUpdateToolWeb.Models.Client
-@{
+﻿@model DistributionUpdateToolWeb.ViewModels.ClientViewModel
+@{ 
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.Name</h2>
+<h2>@Model.Client.Name</h2>
 
 <table class="table table-responsive table-hover">
     <thead>
@@ -13,10 +13,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var email in Model.EmailDistribution)
+        @foreach (var email in Model.EmailAddresses)
         {
             <tr>
-                <td>@email</td>
+                <td>@email.Email</td>
             </tr>
         }
     </tbody>

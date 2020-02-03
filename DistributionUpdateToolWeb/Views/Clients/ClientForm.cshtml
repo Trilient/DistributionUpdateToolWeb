@@ -1,0 +1,32 @@
+﻿@model DistributionUpdateToolWeb.ViewModels.ClientViewModel
+@{
+    ViewBag.Title = "New Client";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    string emailList = "";
+
+    foreach (var email in Model.EmailAddresses)
+    {
+        emailList += $"{email.Email}; ";
+    }
+}
+
+<h2>Add new client</h2>
+
+@using (Html.BeginForm("Preview", "Clients"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Client.Name)
+        @Html.TextBoxFor(m => m.Client.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmailAddresses)
+        @Html.TextArea("TextEmailDistro", emailList, new { @class = "form-control" })
+        <text>Paste your email distribution directly from outlook into the above textbox.</text>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Preview</button>
+}
+
