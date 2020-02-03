@@ -6,6 +6,7 @@
 
 @{ 
     string emailList = "";
+    string pageTitle = (Model.Client != null) ? "Edit " + Model.Client.Name : "Add New Client";
 
     foreach (var email in Model.EmailAddresses)
     {
@@ -13,9 +14,9 @@
     }
 }
 
-<h2>Add new client</h2>
+<h2>@pageTitle</h2>
 
-@using (Html.BeginForm("Preview", "Clients"))
+@using (Html.BeginForm("Save", "Clients"))
 {
     <div class="form-group">
         @Html.LabelFor(m => m.Client.Name)
@@ -27,6 +28,7 @@
         <text>Paste your email distribution directly from outlook into the above textbox.</text>
     </div>
 
-    <button type="submit" class="btn btn-primary">Preview</button>
+    @Html.HiddenFor(m => m.Client.Id)
+    <button type="submit" class="btn btn-primary">Save</button>
 }
 

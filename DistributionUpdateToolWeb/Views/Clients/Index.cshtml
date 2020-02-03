@@ -5,6 +5,7 @@
 }
 
 <h2>Client List</h2>
+@Html.ActionLink("Add new", "Edit", "Clients", new { id = 0 }, new { @class = "btn btn-primary" })
 
 <table class="table table-responsive table-hover">
     <thead>
@@ -17,7 +18,7 @@
             @foreach (var client in Model)
             {
             <tr>
-                <td>@Html.ActionLink(client.Name, "Edit", new { id = client.Id })</td>
+                <td>@Html.ActionLink(client.Name, "Details", new { id = client.Id })</td>
                 <td>@client.Id</td>
             </tr>
             }

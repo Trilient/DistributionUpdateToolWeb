@@ -28,18 +28,21 @@ namespace DistributionUpdateToolWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Preview(Client client, FormCollection collection)
+        public ActionResult Save(Client client, FormCollection collection)
         {
-            // Receive data from form submission and create a list of EmailAddress objects to populate
-            string textDistro = collection["TextEmailDistro"];
-            string[] emails = textDistro.Split(';');
             List<EmailAddress> emailDistro = new List<EmailAddress>();
 
-            // Populate data
-            if (ModelState.IsValid)
+            // Client ID will be 0 by default if it is a new client
+            if (client.Id == 0)
             {
+                // Add new client to DB and save it after, this is so we can pull the new client from the DB and assign the new email address's to the ID in the database
+                // Otherwise the client ID will be 0
                 client = _context.Clients.Add(client);
                 _context.SaveChanges();
+
+                // Receive data from form submission and create a list of EmailAddress objects to populate
+                string textDistro = collection["TextEmailDistro"];
+                string[] emails = textDistro.Split(';');
 
                 foreach (var address in emails)
                 {
@@ -49,7 +52,16 @@ namespace DistributionUpdateToolWeb.Controllers
                 }
 
                 _context.SaveChanges();
-            } 
+            }
+            else if (client.Id > 0)
+            {
+                var clientInDb = GetClientFromDb(client.Id);
+                emailDistro = GetEmailAddresses(client.Id);
+
+                clientInDb.Name = client.Name;
+
+                _context.SaveChanges();
+            }
             else
             {
                 return HttpNotFound();
@@ -62,7 +74,7 @@ namespace DistributionUpdateToolWeb.Controllers
                 EmailAddresses = emailDistro
             };
 
-            return View("Preview", viewModel);
+            return View("Details", viewModel);
         }
        
 
@@ -74,25 +86,55 @@ namespace DistributionUpdateToolWeb.Controllers
             return View(clients);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Details(int id)
         {
-            var emailAddressContext = _context.EmailAddresses;
-            List<EmailAddress> clientDistribution = new List<EmailAddress>();
-
-            foreach (var email in emailAddressContext)
-            {
-                if (email.ClientId == id) clientDistribution.Add(email);
-            }
-
             var viewModel = new ClientViewModel
             {
-                Client = _context.Clients.SingleOrDefault(c => c.Id == id),
-                EmailAddresses = clientDistribution
+                Client = GetClientFromDb(id),
+                EmailAddresses = GetEmailAddresses(id)
 
             };
     
+            return View(viewModel);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var viewModel = new ClientViewModel
+            {
+                Client = GetClientFromDb(id),
+                EmailAddresses = GetEmailAddresses(id)
+
+            };
 
             return View("ClientForm", viewModel);
+        }
+
+        public ActionResult EditEmailAddress(EmailAddress emailAddress)
+        {
+            Client client = GetClientFromDb(emailAddress.ClientId);
+            var emailInDb = _context.EmailAddresses.Single(e => e.Id == emailAddress.Id);
+
+            return View("Details", client);
+        }
+
+        //---------------------------------------------------------------------------------------
+
+        private Client GetClientFromDb(int id)
+        {
+            return _context.Clients.SingleOrDefault(c => c.Id == id);
+        }
+
+        private List<EmailAddress> GetEmailAddresses(int clientId)
+        {
+            List<EmailAddress> clientDistributionList = new List<EmailAddress>();
+
+            foreach (var email in _context.EmailAddresses)
+            {
+                if (email.ClientId == clientId) clientDistributionList.Add(email);
+            }
+
+            return clientDistributionList;
         }
     }
 }
