@@ -1,4 +1,5 @@
-﻿@model DistributionUpdateToolWeb.ViewModels.ClientViewModel
+﻿@model DistributionUpdateToolWeb.Models.Client
+
 @{
     ViewBag.Title = "New Client";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,11 +7,14 @@
 
 @{ 
     string emailList = "";
-    string pageTitle = (Model.Client != null) ? "Edit " + Model.Client.Name : "Add New Client";
+    string pageTitle = (Model != null) ? "Edit " + Model.Name : "Add New Client";
 
-    foreach (var email in Model.EmailAddresses)
+    if (Model != null)
     {
-        emailList += $"{email.Email}; ";
+        foreach (var email in Model.EmailAddresses)
+        {
+            emailList += $"{email.Email}; ";
+        }
     }
 }
 
@@ -19,8 +23,8 @@
 @using (Html.BeginForm("Save", "Clients"))
 {
     <div class="form-group">
-        @Html.LabelFor(m => m.Client.Name)
-        @Html.TextBoxFor(m => m.Client.Name, new { @class = "form-control" })
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.EmailAddresses)
@@ -28,7 +32,7 @@
         <text>Paste your email distribution directly from outlook into the above textbox.</text>
     </div>
 
-    @Html.HiddenFor(m => m.Client.Id)
+    @Html.HiddenFor(m => m.Id)
     <button type="submit" class="btn btn-primary">Save</button>
 }
 

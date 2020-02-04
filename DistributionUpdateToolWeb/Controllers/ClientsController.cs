@@ -35,28 +35,23 @@ namespace DistributionUpdateToolWeb.Controllers
             // Client ID will be 0 by default if it is a new client
             if (client.Id == 0)
             {
-                // Add new client to DB and save it after, this is so we can pull the new client from the DB and assign the new email address's to the ID in the database
-                // Otherwise the client ID will be 0
-                client = _context.Clients.Add(client);
-                _context.SaveChanges();
-
                 // Receive data from form submission and create a list of EmailAddress objects to populate
                 string textDistro = collection["TextEmailDistro"];
                 string[] emails = textDistro.Split(';');
 
                 foreach (var address in emails)
                 {
-                    EmailAddress email = new EmailAddress { ClientId = client.Id, Email = address };
-                    _context.EmailAddresses.Add(email);
+                    EmailAddress email = new EmailAddress { Email = address };
                     emailDistro.Add(email);
                 }
 
+                client.EmailAddresses = emailDistro;
+                _context.Clients.Add(client);
                 _context.SaveChanges();
             }
             else if (client.Id > 0)
             {
                 var clientInDb = GetClientFromDb(client.Id);
-                emailDistro = GetEmailAddresses(client.Id);
 
                 clientInDb.Name = client.Name;
 
@@ -67,14 +62,7 @@ namespace DistributionUpdateToolWeb.Controllers
                 return HttpNotFound();
             }
 
-            // Pass data into the view model
-            var viewModel = new ClientViewModel
-            {
-                Client = client,
-                EmailAddresses = emailDistro
-            };
-
-            return View("Details", viewModel);
+            return View("Details", client);
         }
        
 
@@ -86,36 +74,49 @@ namespace DistributionUpdateToolWeb.Controllers
             return View(clients);
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Details(FormCollection collection, int id, int emailId, bool edit)
         {
-            var viewModel = new ClientViewModel
+            if (edit)
             {
-                Client = GetClientFromDb(id),
-                EmailAddresses = GetEmailAddresses(id)
+                string editEmail = collection["EditEmailAddress"];
+                EmailAddress emailInDb = _context.EmailAddresses.Single(e => e.Id == emailId);
 
-            };
-    
-            return View(viewModel);
+                emailInDb.Email = editEmail;
+
+                _context.SaveChanges();
+            }
+
+            return View(GetClientFromDb(id));
         }
 
         public ActionResult Edit(int id)
         {
-            var viewModel = new ClientViewModel
-            {
-                Client = GetClientFromDb(id),
-                EmailAddresses = GetEmailAddresses(id)
-
-            };
-
-            return View("ClientForm", viewModel);
+            return View("ClientForm", GetClientFromDb(id));
         }
 
-        public ActionResult EditEmailAddress(EmailAddress emailAddress)
+        public ActionResult AddEmailAddress(FormCollection collection, int clientId)
         {
-            Client client = GetClientFromDb(emailAddress.ClientId);
-            var emailInDb = _context.EmailAddresses.Single(e => e.Id == emailAddress.Id);
+            string newEmail = collection["NewEmailAddress"];
+            _context.EmailAddresses.Add(new EmailAddress { ClientId = clientId, Email = newEmail });
+            _context.SaveChanges();
 
-            return View("Details", client);
+            return View("Details", GetClientFromDb(clientId));
+        }
+
+        public ActionResult EditEmailAddress(int emailId, int clientId)
+        {
+            ViewBag.EditEmailId = emailId;
+
+            return View("Details", GetClientFromDb(clientId));
+        }
+
+        public ActionResult DeleteEmailAddress(int id, int clientId)
+        {
+            EmailAddress emailAddress = _context.EmailAddresses.Single(e => e.Id == id);
+            _context.EmailAddresses.Remove(emailAddress);
+            _context.SaveChanges();
+
+            return View("Details", GetClientFromDb(clientId));
         }
 
         //---------------------------------------------------------------------------------------
@@ -123,18 +124,6 @@ namespace DistributionUpdateToolWeb.Controllers
         private Client GetClientFromDb(int id)
         {
             return _context.Clients.SingleOrDefault(c => c.Id == id);
-        }
-
-        private List<EmailAddress> GetEmailAddresses(int clientId)
-        {
-            List<EmailAddress> clientDistributionList = new List<EmailAddress>();
-
-            foreach (var email in _context.EmailAddresses)
-            {
-                if (email.ClientId == clientId) clientDistributionList.Add(email);
-            }
-
-            return clientDistributionList;
         }
     }
 }
