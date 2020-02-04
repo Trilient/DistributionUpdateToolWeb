@@ -5,25 +5,33 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{ 
+    List<DistributionUpdateToolWeb.Models.EmailAddress> clientDistro = (List<DistributionUpdateToolWeb.Models.EmailAddress>)Model.EmailAddresses;
+}
+
 <h2>@Model.Name</h2>
 
 <table class="table table-responsive table-hover">
     <thead>
         <tr>
-            <th scope="col">Client Distribution</th>
+            <th scope="col">Client Email</th>
+            <th scope="col">Client Name</th>
             <th scope="col">Controls</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var email in Model.EmailAddresses)
+        @for (int i = 1; i < clientDistro.Count() + 1; i++)
         {
-            if (email.Id == ViewBag.EditEmailId)
+            if (clientDistro[i].Id == ViewBag.EditEmailId)
             {
                 <tr>
-                    @using (Html.BeginForm("Details", "Clients", new { id = Model.Id, emailId = email.Id, edit = true }))
+                    @using (Html.BeginForm("Save", "Email", new { details = true }))
                     {
                         <td>
-                            @Html.TextBox("EditEmailAddress", email.Email, new { @class = "form-control" })
+                            @Html.TextBoxFor(m => m.EmailAddresses[i].Id, new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.TextBoxFor()
                         </td>
                         <td>
                             <button type="submit" class="btn btn-link">Save</button> | @Html.ActionLink("Cancel", "Details", new { id = Model.Id, emailId = 0, edit = false })
@@ -34,7 +42,7 @@
             else
             {
                 <tr>
-                    <td>@email.Email</td>
+                    <td>@Html.ActionLink(email.Email, "Index", "Email", new { emailId = email.Id }, null)</td>
                     <td>
                         @Html.ActionLink("Edit", "EditEmailAddress", new { emailId = email.Id, clientId = Model.Id }) | @Html.ActionLink("Delete", "DeleteEmailAddress", new { id = email.Id, clientId = Model.Id }, new { @id = "deleteEmail" })
                     </td>

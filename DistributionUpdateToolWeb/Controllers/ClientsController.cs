@@ -76,6 +76,7 @@ namespace DistributionUpdateToolWeb.Controllers
 
         public ActionResult Details(FormCollection collection, int id, int emailId, bool edit)
         {
+            /*
             if (edit)
             {
                 string editEmail = collection["EditEmailAddress"];
@@ -85,7 +86,7 @@ namespace DistributionUpdateToolWeb.Controllers
 
                 _context.SaveChanges();
             }
-
+            */
             return View(GetClientFromDb(id));
         }
 

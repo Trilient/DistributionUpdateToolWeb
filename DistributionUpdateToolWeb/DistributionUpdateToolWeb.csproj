@@ -169,6 +169,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClientsController.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -193,6 +194,10 @@
     <Compile Include="Migrations\202002040223042_UpdateClientModelWithICollection.cs" />
     <Compile Include="Migrations\202002040223042_UpdateClientModelWithICollection.Designer.cs">
       <DependentUpon>202002040223042_UpdateClientModelWithICollection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002042008101_UpdateEmailAddressModelWithCustomerName.cs" />
+    <Compile Include="Migrations\202002042008101_UpdateEmailAddressModelWithCustomerName.Designer.cs">
+      <DependentUpon>202002042008101_UpdateEmailAddressModelWithCustomerName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -234,7 +239,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
@@ -265,6 +269,9 @@
     <Content Include="Views\Clients\Details.cshtml" />
     <Content Include="Views\Clients\ClientForm.cshtml" />
     <Content Include="Views\Clients\Preview.cshtml" />
+    <Content Include="Views\Email\Index.cshtml" />
+    <Content Include="Views\Email\Edit.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -298,6 +305,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002040223042_UpdateClientModelWithICollection.resx">
       <DependentUpon>202002040223042_UpdateClientModelWithICollection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002042008101_UpdateEmailAddressModelWithCustomerName.resx">
+      <DependentUpon>202002042008101_UpdateEmailAddressModelWithCustomerName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

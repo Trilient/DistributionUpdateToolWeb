@@ -1,0 +1,16 @@
+﻿@model DistributionUpdateToolWeb.Models.EmailAddress
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.CustomerName</h2>
+
+<ul>
+    <li>Email Address: @Model.Email</li>
+    <li>Client Group: </li>
+</ul>
+
+@Html.ActionLink("Edit", "Edit", new { emailId = Model.Id })
+
+

@@ -9,6 +9,7 @@ namespace DistributionUpdateToolWeb.Models
     {
         public int Id { get; set; }
         public int ClientId { get; set; }
+        public string CustomerName { get; set; }
         public string Email { get; set; }
     }
 }
