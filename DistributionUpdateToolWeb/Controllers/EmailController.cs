@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DistributionUpdateToolWeb.Models;
+using DistributionUpdateToolWeb.ViewModels;
 
 namespace DistributionUpdateToolWeb.Controllers
 {
@@ -21,14 +22,32 @@ namespace DistributionUpdateToolWeb.Controllers
             _context.Dispose();
         }
 
-        public ActionResult Index(int emailId)
+        public ActionResult Edit(int emailId)
         {
             return View(GetEmailAddressFromDatabase(emailId));
         }
 
-        public ActionResult Edit(int emailId)
+        public ActionResult Delete(int emailId, int clientId)
         {
-            return View(GetEmailAddressFromDatabase(emailId));
+            var emailToDelete = GetEmailAddressFromDatabase(emailId);
+            var returnToClient = _context.Clients.SingleOrDefault(c => c.Id == clientId);
+            _context.EmailAddresses.Remove(emailToDelete);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", "Clients", returnToClient);
+        }
+
+        public ActionResult GetDelete(int emailId, int clientId)
+        {
+            ClientSingleViewModel viewModel = new ClientSingleViewModel
+            { 
+                Client = _context.Clients.SingleOrDefault(c => c.Id == clientId),
+                EmailAddress = _context.EmailAddresses.SingleOrDefault(e => e.Id == emailId)
+
+            };
+
+            return View("Delete", viewModel);
         }
 
         [HttpPost]

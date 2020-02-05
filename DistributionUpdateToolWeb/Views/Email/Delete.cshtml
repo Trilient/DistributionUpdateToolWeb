@@ -1,0 +1,21 @@
+﻿@model DistributionUpdateToolWeb.ViewModels.ClientSingleViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete @Model.EmailAddress.CustomerName</h2>
+
+<ul>
+    <li>Email Address: @Model.EmailAddress.Email</li>
+    <li>Client Group: @Model.Client.Name</li>
+</ul>
+
+<div class="alert alert-danger" role="alert">
+Are you sure you want to delete?
+</div>
+
+@Html.ActionLink("Delete", "Delete", new { emailId = Model.EmailAddress.Id }, new { @class = "btn btn-primary" })
+
+
+
