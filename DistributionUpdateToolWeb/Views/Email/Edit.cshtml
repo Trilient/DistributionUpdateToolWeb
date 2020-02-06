@@ -8,7 +8,7 @@
 
 <h2>Editing @Model.CustomerName</h2>
 
-@using (Html.BeginForm("Save", "Email", new { details = false }))
+@using (Html.BeginForm("Save", "Email"))
 {
     <div class="form-group">
         @Html.LabelFor(m => m.CustomerName)
@@ -20,5 +20,6 @@
     </div>
 
     @Html.HiddenFor(m => m.Id)
+    <a href="javascript:void(0);" onclick="history.go(-1);" class="btn btn-primary">Back to Details</a>
     <button type="submit" class="btn btn-primary">Save</button>
 }

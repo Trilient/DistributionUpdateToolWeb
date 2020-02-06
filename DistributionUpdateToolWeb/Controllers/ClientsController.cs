@@ -74,19 +74,8 @@ namespace DistributionUpdateToolWeb.Controllers
             return View(clients);
         }
 
-        public ActionResult Details(FormCollection collection, int id, int emailId, bool edit)
+        public ActionResult Details(int id)
         {
-            /*
-            if (edit)
-            {
-                string editEmail = collection["EditEmailAddress"];
-                EmailAddress emailInDb = _context.EmailAddresses.Single(e => e.Id == emailId);
-
-                emailInDb.Email = editEmail;
-
-                _context.SaveChanges();
-            }
-            */
             return View(GetClientFromDb(id));
         }
 

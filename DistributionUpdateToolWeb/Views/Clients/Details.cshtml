@@ -26,7 +26,7 @@
                     @email.CustomerName
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", "Email", new { emailId = email.Id, clientId = Model.Id }, null) | @Html.ActionLink("Delete", "Delete", "Email", new { emailId = email.Id, clientId = Model.Id }, new { @id = $"deleteEmail{email.Id}", data_toggle="modal", data_target="#deleteModal", data_emailId = $"{email.Id}" })
+                    @Html.ActionLink("Edit", "Edit", "Email", new { emailId = email.Id, clientId = Model.Id }, null) | @Html.ActionLink("Delete", "GetDelete", "Email", new { emailId = email.Id, clientId = Model.Id }, new { @id = $"deleteEmail{email.Id}" })
                 </td>
             </tr>
 

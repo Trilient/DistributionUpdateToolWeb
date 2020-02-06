@@ -30,14 +30,15 @@ namespace DistributionUpdateToolWeb.Controllers
         public ActionResult Delete(int emailId, int clientId)
         {
             var emailToDelete = GetEmailAddressFromDatabase(emailId);
-            var returnToClient = _context.Clients.SingleOrDefault(c => c.Id == clientId);
+
             _context.EmailAddresses.Remove(emailToDelete);
 
             _context.SaveChanges();
 
-            return RedirectToAction("Details", "Clients", returnToClient);
+            return RedirectToAction("Details", "Clients", new { id = clientId });
         }
 
+        [HttpGet]
         public ActionResult GetDelete(int emailId, int clientId)
         {
             ClientSingleViewModel viewModel = new ClientSingleViewModel
@@ -51,18 +52,15 @@ namespace DistributionUpdateToolWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Save(EmailAddress emailAddress, bool details)
+        public ActionResult Save(EmailAddress emailAddress)
         {
             var emailInDb = _context.EmailAddresses.Single(e => e.Id == emailAddress.Id);
 
             emailInDb.CustomerName = emailAddress.CustomerName;
             emailInDb.Email = emailAddress.Email;
             _context.SaveChanges();
-
-            if (details)
-                return RedirectToAction("Details", "Clients", emailAddress);
-            else
-                return View("Index", emailAddress);
+            
+            return RedirectToAction("Details", "Clients", new { id = emailInDb.ClientId });
         }
 
         private EmailAddress GetEmailAddressFromDatabase(int id)
